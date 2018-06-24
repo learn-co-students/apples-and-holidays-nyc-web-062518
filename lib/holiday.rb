@@ -1,66 +1,111 @@
 require 'pry'
 
 def second_supply_for_fourth_of_july(holiday_hash)
-  # given that holiday_hash looks like this:
-  # {
-  #   :winter => {
-  #     :christmas => ["Lights", "Wreath"],
-  #     :new_years => ["Party Hats"]
-  #   },
-  #   :summer => {
-  #     :fourth_of_july => ["Fireworks", "BBQ"]
-  #   },
-  #   :fall => {
-  #     :thanksgiving => ["Turkey"]
-  #   },
-  #   :spring => {
-  #     :memorial_day => ["BBQ"]
-  #   }
-  # }
-  # return the second element in the 4th of July array
+  holiday_hash[:summer][:fourth_of_july][1]
 end
 
 def add_supply_to_winter_holidays(holiday_hash, supply)
-  # holiday_hash is identical to the one above
-  # add the second argument, which is a supply, to BOTH the
-  # Christmas AND the New Year's arrays
-
+  holiday_hash.each do |season,holiday|
+    holiday.each do |holiday,supplies|
+      if holiday==:christmas||holiday==:new_years
+        supplies << supply
+      end
+    end
+  end
+  holiday_hash
 end
 
 
 def add_supply_to_memorial_day(holiday_hash, supply)
-  # again, holiday_hash is the same as the ones above
-  # add the second argument to the memorial day array
-
+  holiday_hash.each do |season,holidays|
+    holidays.each do |holiday,supplies|
+      if holiday == :memorial_day
+        supplies << supply
+      end
+    end
+  end
+  holiday_hash
 end
 
 def add_new_holiday_with_supplies(holiday_hash, season, holiday_name, supply_array)
-  # code here
-  # remember to return the updated hash
-
+  holiday_hash[season][holiday_name]=supply_array
+  holiday_hash
 end
 
 def all_winter_holiday_supplies(holiday_hash)
-  # return an array of all of the supplies that are used in the winter season
+  list = []
+  holiday_hash.each do |season, holidays|
+     holidays.each do |holiday,supplies|
+        if holiday==:christmas||holiday==:new_years
+          list << supplies
+        
+      end
+    end
+  end
+  list.flatten
+  end
 
+
+
+
+def symbol_to_string(symbol)
+  our_string = symbol.to_s
+  if our_string.include?"_"
+    no_underscore_string = []
+    our_string=our_string.split("_")
+    counter=0
+    our_string.each do |word|
+      no_underscore_string[counter]=word.capitalize
+      counter+=1
+    end
+    no_underscore_string = no_underscore_string.join(" ")
+    no_underscore_string+=":"
+    return no_underscore_string
+  else 
+    our_string=our_string.capitalize + ":"
+    return our_string
+  end
 end
+
 
 def all_supplies_in_holidays(holiday_hash)
-  # iterate through holiday_hash and print items such that your readout resembles:
-  # Winter:
-  #   Christmas: Lights, Wreath
-  #   New Years: Party Hats
-  # Summer:
-  #   Fourth Of July: Fireworks, BBQ
-  # etc.
-
+  holiday_hash.each do |season,holidays|
+    season_string = symbol_to_string(season)
+    puts season_string
+    holidays.each do |holiday,supplies|
+      holiday_string = symbol_to_string(holiday)
+      supplies_string = supplies.join(", ")
+      puts "  #{holiday_string} #{supplies_string}"
+    end
+  end
 end
+
+
+
+
 
 def all_holidays_with_bbq(holiday_hash)
-  # return an array of holiday names (as symbols) where supply lists
-  # include the string "BBQ"
-
+  holidays_with_bbq=[]
+  counter=0
+  holiday_hash.each do |season,holidays|
+    holidays.each do |holiday,supplies|
+      
+      if supplies.include?"BBQ"
+        holidays_with_bbq[counter]=holiday
+        counter+=1
+      end
+    end
+  end
+  return holidays_with_bbq
 end
+
+
+
+
+
+
+
+
 
 
 
